@@ -14,14 +14,53 @@ MongoClient.connect(mongourl.url, {
   useUnifiedTopology: true
 })
   .then(client => {
-    console.log('Connected to Database');
-    const db = client.db('star-wars-quotes');
-    const quotesCollection = db.collection('quotes');
+    console.log('Connected to Database')
+    const db = client.db('star-wars-quotes')
+    const quotesCollection = db.collection('quotes')
 
-    app.use(bodyParser.urlencoded({ extended: true }));
-    //sends html file with form
-    app.get('/', (req,res) => {
-      res.sendFile(__dirname + '/index.html');
+    app.use(bodyParser.urlencoded({ extended: true }))
+    app.use(express.static('public'))
+    app.use(bodyParser.json())
+    app.set('view engine', 'ejs')
+
+
+
+    app.put('/quotes', (req, res) => {
+      quotesCollection.findOneAndUpdate(
+        { name: 'Obi Wan' },
+          {
+            $set: {
+              name: req.body.name,
+              quote: req.body.quote
+            }
+          },
+          {
+            upsert: true // create doc if nothing exists
+          }
+      )
+      .then(result => res.json('Success'))
+      .catch(error => console.error(error))
+    })
+
+    app.delete('/quotes', (req, res) => {
+      quotesCollection.deleteOne(
+        { name: req.body.name }
+      )
+        .then(result => {
+          if (result.deletedCount === 0) {
+            return res.json('No quote to delete')
+          }
+          res.json('Deleted Darth Vadar\'s quote')
+        })
+        .catch(error => console.error(error))
+    })
+
+    app.get('/', (req, res) => {
+      db.collection('quotes').find().toArray()
+        .then(results => {
+        res.render('index.ejs', { quotes: results });
+      })
+        .catch(error => console.error(error));
     });
 
     app.post('/quotes', (req, res) => {
@@ -31,6 +70,5 @@ MongoClient.connect(mongourl.url, {
         })
         .catch(error => console.error(error));
     });
-
   })
   .catch(error => console.error(error));
