@@ -1,0 +1,36 @@
+{
+  "name": "crudy-quotes",
+  "version": "0.0.1",
+  "description": "CRUD API for Star Wars Quotes using MongoDB, Express and Node",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobTheThief/CRUDy-Quotes.git"
+  },
+  "keywords": [
+    "CRUD",
+    "API",
+    "Express",
+    "MongoDB",
+    "Node",
+    "Star",
+    "Wars"
+  ],
+  "author": "RobTheThief",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RobTheThief/CRUDy-Quotes/issues"
+  },
+  "homepage": "https://github.com/RobTheThief/CRUDy-Quotes#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
