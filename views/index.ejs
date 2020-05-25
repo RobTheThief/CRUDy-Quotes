@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
-    <title>MY APP</title>
+    <title>CRUDy-Quotes</title>
   </head>
   <body>
-    <h1> May Node and Express be with you. </h1>
+    <h1>CRUDy-Quotes</h1>
     <form action="/quotes" method="POST">
-      <input type="text" placeholder="name" name="name">
-      <input type="text" placeholder="quote" name="quote">
-      <button type="submit">Submit</button>
+      <input id = 'name' type="text" placeholder="name" name="name">
+      <input id = 'quote' type="text" placeholder="quote" name="quote">
+      <button id = 'submit' >Submit</button>
     </form>
+    <button id = 'delete' type="delete">Delete</button>
+    <button id = 'update1' >Update By Name</button>
+
+    <div id="deleteMessage"></div>
     <h2> Quotes </h2>
 
     <ul class="quotes">
@@ -24,22 +29,8 @@
         </li>
       <% } %>
     </ul>
-    <div>
-      <h2>Darth Vadar invades!</h2>
-      <p>
-        Replace first Yoda's quote with a quote written by Darth Vadar
-      </p>
-      <button id="update-button">Replace Yoda's quote</button>
-    </div>
-    <div>
-      <h2>Remove Darth Vadar!</h2>
-      <p>
-      Delete one Darth Vadar's quote. Does nothing if there are no more Darth
-      Vadar's quote
-      </p>
-      <button id="delete-button">Delete Darth Vadar's quote</button>
-      <div id="message"></div>
-    </div>
+    <button id = 'listQuotesBtn' >List Quotes</button>
+    <span id = 'listQuotes'></span>
     <script src="/main.js"></script>
   </body>
 </html>

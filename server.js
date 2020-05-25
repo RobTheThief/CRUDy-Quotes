@@ -27,7 +27,7 @@ MongoClient.connect(mongourl.url, {
 
     app.put('/quotes', (req, res) => {
       quotesCollection.findOneAndUpdate(
-        { name: 'Obi Wan' },
+        { name: req.body.name },
           {
             $set: {
               name: req.body.name,
@@ -43,22 +43,32 @@ MongoClient.connect(mongourl.url, {
     })
 
     app.delete('/quotes', (req, res) => {
-      quotesCollection.deleteOne(
-        { name: req.body.name }
-      )
+      quotesCollection.deleteOne( { $and:
+        [ { name: req.body.name }, {quote: req.body.quote} ]
+      })
         .then(result => {
           if (result.deletedCount === 0) {
             return res.json('No quote to delete')
           }
-          res.json('Deleted Darth Vadar\'s quote')
+          res.json('Deleted quote')
         })
         .catch(error => console.error(error))
     })
 
+//Routes full list of quotes for ejs to generate
     app.get('/', (req, res) => {
       db.collection('quotes').find().toArray()
         .then(results => {
         res.render('index.ejs', { quotes: results });
+      })
+        .catch(error => console.error(error));
+    });
+
+//Routes full list of quotes to be inserted into html element
+    app.get('/quotes', (req, res) => {
+      db.collection('quotes').find().toArray()
+        .then(results => {
+        res.status(200).json({ quotes: results });
       })
         .catch(error => console.error(error));
     });
