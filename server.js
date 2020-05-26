@@ -4,11 +4,14 @@ const MongoClient = require('mongodb').MongoClient;
 const mongourl    = require('./mongourl');
 const app         = express();
 
-app.listen(3000, function() {
+/*app.listen(3000, function() {
   console.log('Listening on 3000');
-})
-
-
+})*/
+//altered app.listen for Heroku
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});
 
 MongoClient.connect(mongourl.url, {
   useUnifiedTopology: true
