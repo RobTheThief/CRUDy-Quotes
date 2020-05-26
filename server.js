@@ -21,7 +21,6 @@ MongoClient.connect(mongourl.url, {
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(express.static('public'))
     app.use(bodyParser.json())
-    app.set('view engine', 'ejs')
 
 
 
@@ -55,14 +54,14 @@ MongoClient.connect(mongourl.url, {
         .catch(error => console.error(error))
     })
 
-//Routes full list of quotes for ejs to generate
-    app.get('/', (req, res) => {
-      db.collection('quotes').find().toArray()
-        .then(results => {
-        res.render('index.ejs', { quotes: results });
+//Routes html file to client to render page
+      app.get('/', (req, res) => {
+        try {
+          res.sendFile(__dirname + '/index.html')
+        } catch(err){
+          (error => console.error(error))
+        }
       })
-        .catch(error => console.error(error));
-    });
 
 //Routes full list of quotes to be inserted into html element
     app.get('/quotes', (req, res) => {
@@ -75,10 +74,9 @@ MongoClient.connect(mongourl.url, {
 
     app.post('/quotes', (req, res) => {
       quotesCollection.insertOne(req.body)
-        .then(result => {
-         res.redirect('/');
-        })
-        .catch(error => console.error(error));
+        .then(result => res.json('Success'))
+        .catch(error => console.error(error))
     });
+
   })
   .catch(error => console.error(error));
