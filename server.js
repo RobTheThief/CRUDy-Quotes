@@ -13,7 +13,7 @@ app.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`);
 });
 
-MongoClient.connect(mongourl.url, {
+MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://RobTheThief:JoeMamma69@cluster0-cvv9k.mongodb.net/test?retryWrites=true&w=majority', {
   useUnifiedTopology: true
 })
   .then(client => {
