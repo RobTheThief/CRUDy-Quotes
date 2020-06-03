@@ -8,7 +8,7 @@ var cors = require('cors');
 const fs = require('fs')
 const path = require('path')
 //const spdy = require('spdy');
-const port = 3001;
+//const port = 3001;
 
 // created my own certificate with openssl for development
 /*const options = {
@@ -30,9 +30,12 @@ console.log(options)
     })
     */
 
-  app.listen(3000, function() {
-    console.log('Listening on 3000');
-  })
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, () => {
+      console.log(`Our app is running on port ${ PORT }`);
+  });
+
 
   MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://RobTheThief:JoeMamma69@cluster0-cvv9k.mongodb.net/test?retryWrites=true&w=majority', {
     useUnifiedTopology: true
