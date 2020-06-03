@@ -4,18 +4,34 @@ const MongoClient = require('mongodb').MongoClient;
 const mongourl    = require('./mongourl');
 const app         = express();
 
-/*app.listen(3000, function() {
-  console.log('Listening on 3000');
-})*/
-//altered app.listen for Heroku
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Our app is running on port ${ PORT }`);
-});
+var cors = require('cors');
+const fs = require('fs')
+const path = require('path')
+const spdy = require('spdy');
+const port = 3001;
 
-MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://RobTheThief:JoeMamma69@cluster0-cvv9k.mongodb.net/test?retryWrites=true&w=majority', {
-  useUnifiedTopology: true
-})
+// created my own certificate with openssl for development
+const options = {
+  key: fs.readFileSync(path.join(__dirname, '/privateKey.key')),
+  cert: fs.readFileSync(path.join(__dirname, '/certificate.crt'))
+}
+
+console.log(options)
+
+  spdy
+    .createServer(options, app)
+    .listen(port, (error) => {
+      if (error) {
+        console.error(error)
+        return process.exit(1)
+      } else {
+        console.log('Listening on port: ' + port + '.')
+      }
+    })
+
+  MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://RobTheThief:JoeMamma69@cluster0-cvv9k.mongodb.net/test?retryWrites=true&w=majority', {
+    useUnifiedTopology: true
+  })
   .then(client => {
     console.log('Connected to Database')
     const db = client.db('star-wars-quotes')
@@ -24,62 +40,39 @@ MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://RobTheThief:JoeMam
     app.use(bodyParser.urlencoded({ extended: true }))
     app.use(express.static('public'))
     app.use(bodyParser.json())
-
-
-
-    app.put('/quotes', (req, res) => {
-      quotesCollection.findOneAndUpdate(
-        { name: req.body.name },
-          {
-            $set: {
-              name: req.body.name,
-              quote: req.body.quote
-            }
-          },
-          {
-            upsert: true // create doc if nothing exists
-          }
-      )
-      .then(result => res.json('Success'))
-      .catch(error => console.error(error))
-    })
-
-    app.delete('/quotes', (req, res) => {
-      quotesCollection.deleteOne( { $and:
-        [ { name: req.body.name }, {quote: req.body.quote} ]
-      })
-        .then(result => {
-          if (result.deletedCount === 0) {
-            return res.json('No quote to delete')
-          }
-          res.json('Deleted quote')
-        })
-        .catch(error => console.error(error))
-    })
+    app.use(cors())
+    require('./app/routes')(app, db, quotesCollection);
 
 //Routes html file to client to render page
-      app.get('/', (req, res) => {
-        try {
-          res.sendFile(__dirname + '/index.html')
-        } catch(err){
-          (error => console.error(error))
-        }
-      })
-
-//Routes full list of quotes to be inserted into html element
-    app.get('/quotes', (req, res) => {
-      db.collection('quotes').find().toArray()
-        .then(results => {
-        res.status(200).json({ quotes: results });
-      })
-        .catch(error => console.error(error));
-    });
-
-    app.post('/quotes', (req, res) => {
-      quotesCollection.insertOne(req.body)
-        .then(result => res.json('Success'))
-        .catch(error => console.error(error))
-    });
+    app.get('/', (req, res) => {
+      try {
+        res.sendFile(__dirname + '/index.html')
+      } catch(err){
+        (error => console.error(error))
+      }
+    })
 
   })
   .catch(error => console.error(error));
+
+
+  //////////////////////////////////
+  /*app.listen(3000, function() {
+    console.log('Listening on 3000');
+  })
+
+  MongoClient.connect(mongourl.url, {
+    useUnifiedTopology: true
+  })
+  //^^^^^^^^^^^^^local
+
+  MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://Get user from mongourl.js:Get password from mongourl.js@cluster0-cvv9k.mongodb.net/test?retryWrites=true&w=majority', {
+    useUnifiedTopology: true
+  })
+  *<<<<<<<<<<<<<<<<<
+  // ^^^^^^^altered app.listen and MongoClient.connect for Heroku test. Test ok. Reverting back to local build to complete dev
+
+  /*app.listen(3000, function() {
+    console.log('Listening on 3000');
+  })
+  */
