@@ -12,7 +12,7 @@ const PORT        = process.env.PORT || 3000;
       console.log(`Our app is running on port ${ PORT }`);
   });
 
-  MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://RobTheThief:JoeMamma69@cluster0-cvv9k.mongodb.net/test?retryWrites=true&w=majority', {
+  MongoClient.connect(process.env.MONGODB_URI || mongourl, { 
     useUnifiedTopology: true
   })
   .then(client => {
