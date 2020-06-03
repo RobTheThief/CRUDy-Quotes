@@ -7,11 +7,11 @@ const app         = express();
 var cors = require('cors');
 const fs = require('fs')
 const path = require('path')
-const spdy = require('spdy');
+//const spdy = require('spdy');
 const port = 3001;
 
 // created my own certificate with openssl for development
-const options = {
+/*const options = {
   key: fs.readFileSync(path.join(__dirname, '/privateKey.key')),
   cert: fs.readFileSync(path.join(__dirname, '/certificate.crt'))
 }
@@ -28,6 +28,11 @@ console.log(options)
         console.log('Listening on port: ' + port + '.')
       }
     })
+    */
+
+  app.listen(3000, function() {
+    console.log('Listening on 3000');
+  })
 
   MongoClient.connect(process.env.MONGODB_URI || 'mongodb+srv://RobTheThief:JoeMamma69@cluster0-cvv9k.mongodb.net/test?retryWrites=true&w=majority', {
     useUnifiedTopology: true
