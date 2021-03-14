@@ -3,7 +3,7 @@ CRUD API for quotes!
 
 ## EXAMPLE PUT FUNCTION IN FRONTEND
 ```javascript
-   const update1Quote  = document.querySelector('#update_one_quote')
+const update1Quote  = document.querySelector('#update_one_quote')
 
 update1Quote.addEventListener('click', _ => {
   fetch('https://crudy-quotes.herokuapp.com/quotes', {
@@ -17,8 +17,6 @@ update1Quote.addEventListener('click', _ => {
     .then(res => {
       if (res.ok) return res.json()
     })
-    .then(response => {
-      printQuotesFunc();
-    })
+    .catch(console.error)
 })
 ```
