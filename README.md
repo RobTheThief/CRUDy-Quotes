@@ -1,12 +1,9 @@
 # CRUDy-Quotes
 CRUD API for quotes!
 
-## Code Examples
-To generate lorem ipsum use special shortcode: `put-your-code-here`
-
-EXAMPLE PUT FUNCTION IN FRONTEND
-
-const update1Quote  = document.querySelector('#update_one_quote')
+## EXAMPLE PUT FUNCTION IN FRONTEND
+```javascript
+   const update1Quote  = document.querySelector('#update_one_quote')
 
 update1Quote.addEventListener('click', _ => {
   fetch('https://crudy-quotes.herokuapp.com/quotes', {
@@ -24,3 +21,4 @@ update1Quote.addEventListener('click', _ => {
       printQuotesFunc();
     })
 })
+```
