@@ -1,6 +1,8 @@
 # CRUDy-Quotes
 CRUD API for quotes!
 
+## Code Examples
+To generate lorem ipsum use special shortcode: `put-your-code-here`
 
 EXAMPLE PUT FUNCTION IN FRONTEND
 
